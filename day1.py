@@ -1,5 +1,7 @@
 import re
 
+from functions import clean_lines
+
 PATTERN = r'(?=(\d|one|two|three|four|five|six|seven|eight|nine))'
 
 
@@ -11,7 +13,7 @@ def to_int(val: str) -> int:
 
 
 def get_calibration_sum(input_lines):
-    lines = filter(lambda line: (len(line)), input_lines.split("\n"))
+    lines = clean_lines(input_lines)
     result = []
     for line in lines:
         found_digits = re.findall(PATTERN, line)
