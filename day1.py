@@ -4,28 +4,10 @@ PATTERN = r'(?=(\d|one|two|three|four|five|six|seven|eight|nine))'
 
 
 def to_int(val: str) -> int:
-    if val.isdigit():
-        return int(val)
-    else:
-        match val:
-            case "one":
-                return 1
-            case "two":
-                return 2
-            case "three":
-                return 3
-            case "four":
-                return 4
-            case "five":
-                return 5
-            case "six":
-                return 6
-            case "seven":
-                return 7
-            case "eight":
-                return 8
-            case "nine":
-                return 9
+    mapping = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9}
+    for i in range(1, 9):
+        mapping[str(i)] = i
+    return mapping[val]
 
 
 def get_calibration_sum(input_lines):
@@ -34,7 +16,7 @@ def get_calibration_sum(input_lines):
     for line in lines:
         if len(line):
             found_digits = re.findall(PATTERN, line)
-            result.append(to_calibration_value(found_digits[0], found_digits[len(found_digits) - 1]))
+            result.append(to_calibration_value(found_digits[0], found_digits[- 1]))
 
     return sum(result)
 
