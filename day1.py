@@ -30,7 +30,7 @@ def solve(input_lines):
     lines = input_lines.split("\n")
     result = []
     for line in lines:
-        if len(line) > 0:
+        if len(line):
             found_digits = re.findall(r'(?=(\d|one|two|three|four|five|six|seven|eight|nine))', line)
             result.append(to_calibration_value(found_digits[0], found_digits[len(found_digits) - 1]))
 
