@@ -16,7 +16,7 @@ def get_calibration_sum(input_lines):
     for line in lines:
         if len(line):
             found_digits = re.findall(PATTERN, line)
-            result.append(to_calibration_value(found_digits[0], found_digits[- 1]))
+            result.append(to_calibration_value(found_digits[0], found_digits[-1]))
 
     return sum(result)
 
