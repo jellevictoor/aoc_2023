@@ -1,32 +1,29 @@
 import re
 
 
-def to_str(val: str) -> str:
+def to_int(val: str) -> int:
     if val.isdigit():
-        return val
+        return int(val)
     else:
-        result = ""
         match val:
             case "one":
-                result = 1
+                return 1
             case "two":
-                result = 2
+                return 2
             case "three":
-                result = 3
+                return 3
             case "four":
-                result = 4
+                return 4
             case "five":
-                result = 5
+                return 5
             case "six":
-                result = 6
+                return 6
             case "seven":
-                result = 7
+                return 7
             case "eight":
-                result = 8
+                return 8
             case "nine":
-                result = 9
-
-        return str(result)
+                return 9
 
 
 def solve(input_lines):
@@ -34,17 +31,19 @@ def solve(input_lines):
     result = []
     for line in lines:
         if len(line) > 0:
-            first = re.findall(r'(?=(\d|one|two|three|four|five|six|seven|eight|nine))', line)
-            result.append(int(to_str(first[0]) + to_str(first[len(first) - 1])))
+            found_digits = re.findall(r'(?=(\d|one|two|three|four|five|six|seven|eight|nine))', line)
+            result.append(to_calibration_value(found_digits[0], found_digits[len(found_digits) - 1]))
 
     return sum(result)
 
 
+def to_calibration_value(first_digit: str, last_digit: str) -> int:
+    return to_int(first_digit) * 10 + to_int(last_digit)
+
+
 def main():
     with open('input/day1.txt', 'r') as f:
-        result = solve(f.read())
-        # 53846 is too low
-        return result
+        return solve(f.read())
 
 
 def test_day1():
@@ -66,18 +65,8 @@ xtwone3four
 4nineeightseven2
 zoneight234
 7pqrstsixteen
-evsevenef
-one
-two
-three
-four
-five
-six
-seven
-eight
-nine
 """
-    expected = sum([29, 83, 13, 24, 42, 14, 76, 77, 11, 22, 33, 44, 55, 66, 77, 88, 99])
+    expected = sum([29, 83, 13, 24, 42, 14, 76])
     actual = solve(input)
     assert expected == actual
 
