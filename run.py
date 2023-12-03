@@ -1,4 +1,3 @@
-import day1
-import day2
+import day3
 
-print(day2.main())
+print(day3.main())
