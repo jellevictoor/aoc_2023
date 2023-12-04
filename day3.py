@@ -77,8 +77,9 @@ def get_gear_ratio(schematic_lines):
             matches[1]['pair'] = matches[0]['number']
 
     rich_result = [res for res in rich_result if 'pair' in res]
+    rich_result = {item['star_position']: item for item in rich_result}.values()
     rich_result = [res['number'] * res['pair'] for res in rich_result]
-    rich_result = list(set(rich_result))
+    rich_result = list(rich_result)
     return sum(rich_result)
 
 
@@ -157,3 +158,20 @@ def test_day3_star2():
 """
     actual = get_gear_ratio(clean_lines(schematic))
     assert 467835 == actual
+
+
+def test_day3_star2_reddit():
+    schematic = """.......5......
+                    ..7*..*.....4*
+                    ...*13*......9
+                    .......15.....
+                    ..............
+                    ..............
+                    ..............
+                    ..............
+                    ..............
+                    ..............
+                    21............
+                    ...*9........."""
+    actual = get_gear_ratio(clean_lines(schematic))
+    assert sum([7 * 13, 7 * 13, 15 * 13, 4 * 9, 5 * 13]) == (actual + 7 * 13)
