@@ -9,33 +9,42 @@ def has_neighbour(schematic_lines, x, y):
                     print(f"checking {y} and {x} for {_y},{_x}")
                     neighbour = schematic_lines[_y][_x]
                     if not (neighbour.isdigit() or neighbour == '.'):
-                        return True
-    return False
+                        return [{'symbol':neighbour}]
+    return []
 
 
 def get_part_numbers(schematic_lines):
     rich_result = []
     for y, line in enumerate(schematic_lines):
-        is_part_number = False
+        neighbour_part_numbers = []
         number = ''
         for x, symbol in enumerate(list(line)):
             if symbol.isdigit():
                 number += symbol
-                if not is_part_number:
-                    is_part_number = has_neighbour(schematic_lines, x, y)
+                if len(neighbour_part_numbers) == 0:
+                    neighbour_part_numbers += has_neighbour(schematic_lines, x, y)
             if not symbol.isdigit():
-                if is_part_number:
+                if len(neighbour_part_numbers) > 0:
                     rich_result.append(int(number))
-                    is_part_number = False
+                    neighbour_part_numbers = []
                 number = ''
-        if is_part_number:
+        if len(neighbour_part_numbers) > 0:
             rich_result.append(int(number))
     return sum(rich_result)
 
 
+def get_gear_ratio(schematic_lines):
+    gear_ratio = []
+    for y, line in enumerate(schematic_lines):
+        for x, symbol in enumerate(list(schematic_lines[y])):
+            if schematic_lines[y][x] == '*':
+                pass
+    return sum(gear_ratio)
+
+
 def main():
     with open('input/day3.txt', 'r') as f:
-        return get_part_numbers(clean_lines(f.read()))
+        return get_gear_ratio(clean_lines(f.read()))
 
 
 def test_day3_star1():
@@ -54,6 +63,8 @@ def test_day3_star1():
     expected = 4361
     actual = get_part_numbers(clean_lines(schematic))
     assert expected == actual
+
+
 def test_day3_star1_first_3_lines():
     schematic = """..172..............................454..46.......507..........809......923.778..................793..............137.............238........
 ............*.........712........=.......*................515.*...........*.......690.........../..........658.........=.........*..........
@@ -74,6 +85,7 @@ def test_day3_star1_last_3_lines():
     actual = get_part_numbers(clean_lines(schematic))
     assert expected == actual
 
+
 def test_day3_start1_reddit_example():
     schematic = """12.......*..
 +.........34
@@ -89,3 +101,19 @@ def test_day3_start1_reddit_example():
 1.1.......56"""
     actual = get_part_numbers(clean_lines(schematic))
     assert 413 == actual
+
+
+def test_day3_star2():
+    schematic = """467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..
+"""
+    actual = get_gear_ratio(clean_lines(schematic))
+    assert 467835 == actual
