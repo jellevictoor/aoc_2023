@@ -13,16 +13,18 @@ def has_neighbour(schematic_lines, x, y):
     return []
 
 
-def get_neighbour(schematic_lines, col, row):
+def get_star_neighbours(schematic_lines, col, row):
+    stars = []
     for _row in [row - 1, row, row + 1]:
         if 0 <= _row < len(schematic_lines):
             for _col in [col - 1, col, col + 1]:
                 if 0 <= _col < len(schematic_lines[_row]):
                     print(f"checking {row} and {col} for {_row},{_col}")
                     neighbour = schematic_lines[_row][_col]
-                    if not (neighbour.isdigit() or neighbour == '.'):
-                        return [{'symbol': neighbour}]
-    return []
+                    if neighbour == '*':
+                        stars += [{'row': _row, 'col': _col}]
+
+    return stars
 
 
 def get_part_numbers(schematic_lines):
@@ -46,12 +48,38 @@ def get_part_numbers(schematic_lines):
 
 
 def get_gear_ratio(schematic_lines):
-    gear_ratio = []
+    rich_result = []
     for row, line in enumerate(schematic_lines):
-        for col, symbol in enumerate(list(schematic_lines[row])):
-            if schematic_lines[row][col] == '*':
-                has_neighbour()
-    return sum(gear_ratio)
+        neighbour_part_numbers = []
+        number = ''
+        for col, symbol in enumerate(list(line)):
+            if symbol.isdigit():
+                number += symbol
+                if len(neighbour_part_numbers) == 0:
+                    neighbour_part_numbers += get_star_neighbours(schematic_lines, col, row)
+            if not symbol.isdigit():
+                if len(neighbour_part_numbers) > 0:
+                    for n in neighbour_part_numbers:
+                        rich_result.append({'number': int(number), 'star_location': n})
+                    neighbour_part_numbers = []
+                number = ''
+        if len(neighbour_part_numbers) > 0:
+            for n in neighbour_part_numbers:
+                rich_result.append({'number': int(number), 'star_location': n})
+
+    for res in rich_result:
+        res['star_position'] = f"{res['star_location']['row']},{res['star_location']['col']}"
+    star_positions = set([res['star_position'] for res in rich_result])
+    for star_position in star_positions:
+        matches = [res for res in rich_result if res['star_position'] == star_position]
+        if len(matches) == 2:
+            matches[0]['pair'] = matches[1]['number']
+            matches[1]['pair'] = matches[0]['number']
+
+    rich_result = [res for res in rich_result if 'pair' in res]
+    rich_result = [res['number'] * res['pair'] for res in rich_result]
+    rich_result = list(set(rich_result))
+    return sum(rich_result)
 
 
 def main():

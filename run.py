@@ -1,4 +1,4 @@
 import day3
 import day4
 
-print(day4.main())
+print(day3.main())
