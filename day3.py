@@ -9,7 +9,19 @@ def has_neighbour(schematic_lines, x, y):
                     print(f"checking {y} and {x} for {_y},{_x}")
                     neighbour = schematic_lines[_y][_x]
                     if not (neighbour.isdigit() or neighbour == '.'):
-                        return [{'symbol':neighbour}]
+                        return [{'symbol': neighbour}]
+    return []
+
+
+def get_neighbour(schematic_lines, col, row):
+    for _row in [row - 1, row, row + 1]:
+        if 0 <= _row < len(schematic_lines):
+            for _col in [col - 1, col, col + 1]:
+                if 0 <= _col < len(schematic_lines[_row]):
+                    print(f"checking {row} and {col} for {_row},{_col}")
+                    neighbour = schematic_lines[_row][_col]
+                    if not (neighbour.isdigit() or neighbour == '.'):
+                        return [{'symbol': neighbour}]
     return []
 
 
@@ -35,10 +47,10 @@ def get_part_numbers(schematic_lines):
 
 def get_gear_ratio(schematic_lines):
     gear_ratio = []
-    for y, line in enumerate(schematic_lines):
-        for x, symbol in enumerate(list(schematic_lines[y])):
-            if schematic_lines[y][x] == '*':
-                pass
+    for row, line in enumerate(schematic_lines):
+        for col, symbol in enumerate(list(schematic_lines[row])):
+            if schematic_lines[row][col] == '*':
+                has_neighbour()
     return sum(gear_ratio)
 
 
