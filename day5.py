@@ -15,9 +15,20 @@ class SeedMap:
     destination: [int]
     source: [int]
 
-    def get_destination(self, id:int):
-        if id in self.source:
-            return self.destination[self.source.index(id)]
+    def get_destination(self, id: int):
+        found = False
+        index = 0
+        map_index = 0
+        for source_range in self.source:
+            if source_range[0] <= id < (source_range[0] + source_range[1]):
+                found = True
+                index = (id - source_range[0])
+                break
+            else:
+                map_index += 1
+
+        if found:
+            return self.destination[map_index][0] + index
         else:
             return id
 
@@ -41,10 +52,10 @@ def solve(lines):
             dest_start = int(split[0])
             source_start = int(split[1])
             length = int(split[2])
-            destination.extend(range(dest_start, dest_start+length))
-            source.extend(range(source_start, source_start+length))
+            destination.append([dest_start, length])
+            source.append([source_start, length])
     seed_maps.append(SeedMap(name, destination, source))
-
+    print(f"done parsing")
     result = []
     for seed in seeds:
         next = seed.seed_id
@@ -52,6 +63,7 @@ def solve(lines):
             next = seed_map.get_destination(next)
         result.append(next)
     return min(result)
+
 
 def main():
     with open('input/day5.txt', 'r') as f:
@@ -95,4 +107,4 @@ humidity-to-location map:
 """
     expected = 35
     actual = solve(clean_lines(input))
-    assert expected == actual
+    assert actual == expected
