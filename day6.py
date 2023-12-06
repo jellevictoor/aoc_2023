@@ -13,9 +13,9 @@ class Race:
 
 
 def solve(lines):
-    time = [int(time) for time in re.findall(r'\d+', lines[0])]
-    distance = [int(distance) for distance in re.findall(r'\d+', lines[1])]
-    races = [Race(index + 1, time[index], distance[index]) for index in range(len(time))]
+    time = int(''.join([time for time in re.findall(r'\d+', lines[0])]))
+    distance = int(''.join([distance for distance in re.findall(r'\d+', lines[1])]))
+    races = [Race(1,time,distance)]
     combos = []
     for race in races:
         print(f"race {race.race_no}, time: {race.time}, distance: {race.distance}")
@@ -39,6 +39,6 @@ def test_day6_star1():
 Time:      7  15   30
 Distance:  9  40  200
 """
-    expected = 288
+    expected = 71503
     actual = solve(clean_lines(input))
     assert actual == expected
