@@ -34,7 +34,7 @@ class SeedMap:
 
 
 def solve(lines):
-    seeds = [Seed(int(id)) for id in re.findall(r'(\d+)', lines[0])]
+    seeds = [rnge.split(' ') for rnge in re.findall(r'(\d+ \d+)', lines[0])]
     name = ""
     seed_maps = []
     destination = list()
@@ -44,7 +44,6 @@ def solve(lines):
         if re.match(r'.*\smap:', line):
             if name:
                 seed_maps.append(SeedMap(name, destination, source))
-                name = ''
                 source = []
                 destination = []
             name = split[0]
