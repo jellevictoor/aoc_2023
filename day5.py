@@ -56,11 +56,12 @@ def solve(lines):
     seed_maps.append(SeedMap(name, destination, source))
     print(f"done parsing")
     result = []
-    for seed in seeds:
-        next = seed.seed_id
-        for seed_map in seed_maps:
-            next = seed_map.get_destination(next)
-        result.append(next)
+    for seed_range in seeds:
+        for seed in range(int(seed_range[0]), int(seed_range[0])+int(seed_range[1])):
+            next = seed
+            for seed_map in seed_maps:
+                next = seed_map.get_destination(next)
+            result.append(next)
     return min(result)
 
 
@@ -104,6 +105,6 @@ humidity-to-location map:
 60 56 37
 56 93 4
 """
-    expected = 35
+    expected = 46
     actual = solve(clean_lines(input))
     assert actual == expected
