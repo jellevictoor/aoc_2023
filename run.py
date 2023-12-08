@@ -1,9 +1,9 @@
 import time
 
-import day7
+import day8
 
 start = time.time()
-print(day7.main())
+print(day8.main())
 end = time.time()
 print("The time of execution of above program is :",
       (end - start) * 10 ** 3, "ms")
