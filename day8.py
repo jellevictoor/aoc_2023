@@ -1,3 +1,4 @@
+import math
 import re
 
 from functions import clean_lines
@@ -7,20 +8,23 @@ def solve(lines):
     instructions = list(lines[0])
     regex = r'[A-Z]{3}'
     graph = {re.findall(regex, s)[0]: (re.findall(regex, s)[1], re.findall(regex, s)[2]) for s in lines[1:]}
-    steps = 0
-    current_position = 'AAA'
-    while current_position != 'ZZZ':
-        for instruction in instructions:
+    start_positions = [key for key in graph.keys() if key[2] == 'A']
+    shortest_paths = []
+    for position in start_positions:
+        current_position = position
+        steps = 0
+        while current_position[2] != 'Z':
+            for instruction in instructions:
 
-            if instruction == 'L':
-                current_position = graph[current_position][0]
-            else:
-                current_position = graph[current_position][1]
-            steps += 1
-            if current_position == 'ZZZ':
-                break
-
-    return steps
+                if instruction == 'L':
+                    current_position = graph[current_position][0]
+                else:
+                    current_position = graph[current_position][1]
+                steps += 1
+                if current_position[2] == 'Z':
+                    break
+        shortest_paths.append(steps)
+    return math.lcm(*shortest_paths)
 
 
 def main():
@@ -44,6 +48,7 @@ ZZZ = (ZZZ, ZZZ)
     expected = 2
     actual = solve(clean_lines(input))
     assert actual == expected
+
 
 def test_day8_star1():
     input = """
