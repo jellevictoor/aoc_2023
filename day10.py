@@ -24,6 +24,18 @@ class Position:
         else:
             self.value = '.'
 
+    def can_go_north(self):
+        return self.value in SOUTH_VALUES
+
+    def can_go_south(self):
+        return self.value in NORTH_VALUES
+
+    def can_go_east(self):
+        return self.value in WEST_VALUES
+
+    def can_go_west(self):
+        return self.value in EAST_VALUES
+
 
 @dataclass
 class Map:
@@ -54,16 +66,16 @@ class Map:
             # J is a 90-degree bend connecting north and west.
             # 7 is a 90-degree bend connecting south and west.
             # F is a 90-degree bend connecting south and east.
-            if direction != 'SOUTH' and neighbours[0].value in NORTH_VALUES:
+            if direction != 'SOUTH' and current_position.can_go_north() and neighbours[0].value in NORTH_VALUES:
                 direction = 'NORTH'
                 current_position = self.get_position(current_position.row - 1, current_position.col)
-            elif direction != 'NORTH' and neighbours[2].value in SOUTH_VALUES:
+            elif direction != 'NORTH' and current_position.can_go_south() and neighbours[2].value in SOUTH_VALUES:
                 direction = 'SOUTH'
                 current_position = self.get_position(current_position.row + 1, current_position.col)
-            elif direction != 'EAST' and neighbours[3].value in WEST_VALUES:
+            elif direction != 'EAST' and current_position.can_go_west() and neighbours[3].value in WEST_VALUES:
                 direction = 'WEST'
                 current_position = self.get_position(current_position.row, current_position.col - 1)
-            elif direction != 'WEST' and neighbours[1].value in EAST_VALUES:
+            elif direction != 'WEST' and current_position.can_go_east() and neighbours[1].value in EAST_VALUES:
                 direction = 'EAST'
                 current_position = self.get_position(current_position.row, current_position.col + 1)
             else:
